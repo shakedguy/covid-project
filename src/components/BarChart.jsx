@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-import faker from "faker";
+import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Box } from "@mui/material";
+import { countries, fetchData, colors, getDates } from "../services/dataService";
+import faker from "faker";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const options = {
+export const Options = {
   responsive: true,
   plugins: {
     legend: {
@@ -19,30 +20,62 @@ const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const labels = countries;
 
-const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "#009688",
-    },
-  ],
-};
+const BarChart = ({ range }) => {
+  const [Options, setOptions] = useState(null);
+  const [Datasets, setDatasets] = useState(null);
+  const [Data, setData] = useState([]);
 
-const BarChart = () => {
-  return (
-    <Box sx={{ maxWidth: 800, justifySelf: "center", justifyItems: "center", mx: 30 }}>
-      <Bar options={options} data={data} />;
-    </Box>
+  useEffect(async () => {
+    if (range) {
+      const result = await fetchData(range.range, "deaths");
+      setData(result);
+      const d = Array.from(result);
+      console.log(d);
+    }
+  }, [range]);
+
+  useEffect(
+    useCallback(async () => {
+      const labels = await getDates(range.range);
+      if (Data) {
+        const dataset = {
+          labels: labels,
+          datasets: [
+            {
+              data: Data,
+              backgroundColor: colors,
+              borderColor: "black",
+              borderWidth: 1,
+            },
+          ],
+        };
+        const options = {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            title: {
+              display: true,
+              text: `Mortality until ${range.title.toLowerCase()}`,
+              position: "top",
+              font: {
+                size: 20,
+                family: "sans-serif",
+              },
+            },
+          },
+        };
+        setDatasets(dataset);
+        setOptions(options);
+      }
+    }, [Data]),
+    [Data]
   );
+
+  return <Box sx={{ maxWidth: 800, maxHeight: 400, justifySelf: "center", justifyItems: "center", mx: 30 }}>{Datasets && <Bar data={Datasets} options={Options} />};</Box>;
 };
 
 export default BarChart;

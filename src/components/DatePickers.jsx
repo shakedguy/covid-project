@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { TimeRanges } from "../services/dataService";
-import { Card, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 const DatePickers = ({ range }) => {
-  const today = new Date();
-  const [day, month, year] = [today.getDate(), today.getMonth(), today.getFullYear()];
   const [value, setValue] = useState(null);
 
   useEffect(() => {
