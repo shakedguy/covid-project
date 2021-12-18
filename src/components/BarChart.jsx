@@ -25,55 +25,52 @@ const labels = countries;
 const BarChart = ({ range }) => {
   const [Options, setOptions] = useState(null);
   const [Datasets, setDatasets] = useState(null);
-  const [Data, setData] = useState([]);
+  const [Data, setData] = useState(null);
 
   useEffect(async () => {
     if (range) {
       const result = await fetchData(range.range, "deaths");
+      console.log(result);
+      console.log(result[0]);
       setData(result);
-      const d = Array.from(result);
-      console.log(d);
     }
   }, [range]);
 
-  useEffect(
-    useCallback(async () => {
-      const labels = await getDates(range.range);
-      if (Data) {
-        const dataset = {
-          labels: labels,
-          datasets: [
-            {
-              data: Data,
-              backgroundColor: colors,
-              borderColor: "black",
-              borderWidth: 1,
-            },
-          ],
-        };
-        const options = {
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: "top",
-            },
-            title: {
-              display: true,
-              text: `Mortality until ${range.title.toLowerCase()}`,
-              position: "top",
-              font: {
-                size: 20,
-                family: "sans-serif",
-              },
+  useEffect(() => {
+    const labels = getDates(range.range);
+    if (Data) {
+      const dataset = {
+        labels: labels,
+        datasets: [
+          {
+            data: Data,
+            backgroundColor: colors,
+            borderColor: "black",
+            borderWidth: 1,
+          },
+        ],
+      };
+      const options = {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: `Mortality until ${range.title.toLowerCase()}`,
+            position: "top",
+            font: {
+              size: 20,
+              family: "sans-serif",
             },
           },
-        };
-        setDatasets(dataset);
-        setOptions(options);
-      }
-    }, [Data]),
-    [Data]
-  );
+        },
+      };
+      setDatasets(dataset);
+      setOptions(options);
+    }
+  }, [Data]);
 
   return <Box sx={{ maxWidth: 800, maxHeight: 400, justifySelf: "center", justifyItems: "center", mx: 30 }}>{Datasets && <Bar data={Datasets} options={Options} />};</Box>;
 };
