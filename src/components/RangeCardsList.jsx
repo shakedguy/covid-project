@@ -8,7 +8,7 @@ const RangeCardsList = ({ onRangeCardClick }) => {
     onRangeCardClick(selectedItem);
   };
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box sx={{ mb: 0, display: "flex", justifyContent: "center" }}>
       {TimeRanges.map((range) => (
         <RangeCard range={range} onCardClick={selectedItemHandler} />
         // <Card elevation={3} raised sx={{ bgcolor: "primary.main", my: 8, mx: 2 }} onClick={selectedItemHandler}>

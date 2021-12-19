@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Chart as ChartJS, LinearScale, ArcElement, Title, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { countries, colors, fetchData } from "../services/dataService";
+import { countries, colors, getData, setChartOptions } from "../services/dataService";
 import { Box } from "@mui/material";
+import Loader from "./Loader";
 
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
@@ -13,14 +14,14 @@ const PieChart = ({ range }) => {
 
   useEffect(async () => {
     if (range) {
-      const result = await fetchData(range.range, "deaths");
+      const result = await getData(range, "deaths");
+      console.log(result);
       setData(result);
     }
   }, [range]);
 
   useEffect(() => {
     if (Data) {
-      console.log(Data);
       const dataset = {
         labels: countries,
         datasets: [
@@ -32,30 +33,20 @@ const PieChart = ({ range }) => {
           },
         ],
       };
-      const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: "top",
-          },
-          title: {
-            display: true,
-            text: `Mortality until ${range.title.toLowerCase()}`,
-            position: "top",
-            font: {
-              size: 20,
-              family: "sans-serif",
-            },
-          },
-        },
-      };
+      const options = setChartOptions(`Mortality until ${range.title.toLowerCase()}`);
+
       setDatasets(dataset);
       setOptions(options);
     }
   }, [Data]);
+  const isLoading = !Datasets || !Options;
 
-  return <Box sx={{ justifySelf: "center", justifyItems: "center", mx: 5, my: 2, p: 2 }}>{Datasets && Options && <Pie width={400} height={400} data={Datasets} options={Options} />}</Box>;
+  return (
+    <Box sx={{ justifySelf: "center", justifyItems: "center", mx: 5, my: 2, p: 2 }}>
+      {isLoading && <Loader />}
+      {!isLoading && <Pie width={400} height={400} data={Datasets} options={Options} />}
+    </Box>
+  );
 };
 
 export default PieChart;
