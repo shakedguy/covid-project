@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Chart as ChartJS, LinearScale, ArcElement, Title, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { countries, colors, getData, setChartOptions } from "../services/dataService";
+import { countries, colors, getData } from "../services/dataService";
+import { setChartOptions } from "../services/helpers";
 import { Box } from "@mui/material";
 import Loader from "./Loader";
 
@@ -15,7 +16,6 @@ const PieChart = ({ range }) => {
   useEffect(async () => {
     if (range) {
       const result = await getData(range, "deaths");
-      console.log(result);
       setData(result);
     }
   }, [range]);

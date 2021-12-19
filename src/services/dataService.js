@@ -1,28 +1,18 @@
 import dayjs from "dayjs";
+import { createRange } from "../services/helpers";
 
-const today = new dayjs();
-const yesterday = [today.subtract(1, "day")];
-const lastWeek = [];
-const lastMonth = [];
-for (let i = 30; i >= 1; --i) {
-  lastMonth.push(today.subtract(i, "day"));
-  i <= 7 && lastWeek.push(today.subtract(i, "day"));
-}
-
-export const createRange = (from, to) => {};
-
-export const TimeRanges = [
+export const getTimeRanges = [
   {
     title: "Yesterday",
-    dates: yesterday,
+    dates: createRange(dayjs().subtract(1, "day"), dayjs()),
   },
   {
     title: "This week",
-    dates: lastWeek,
+    dates: createRange(dayjs().subtract(7, "day"), dayjs()),
   },
   {
     title: "This month",
-    dates: lastMonth,
+    dates: createRange(dayjs().subtract(30, "day"), dayjs()),
   },
   {
     title: "Custom",
@@ -53,7 +43,8 @@ export const getData = async (range, status = "") => {
       return;
     }
   }
-  localStorage.setItem(range.title, JSON.stringify(result));
+
+  range.title !== "Custom" && localStorage.setItem(range.title, JSON.stringify(result));
   return result;
 };
 
@@ -68,54 +59,6 @@ const fetchData = async (api) => {
     console.log(error.message);
     return fetchData(api);
   }
-};
-
-export const getDates = (range) => range.map((date) => date.format("DD/MM"));
-
-export const setChartOptions = (title) => {
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    tooltips: {
-      mode: "dataset",
-    },
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: title,
-        position: "top",
-        font: {
-          size: 20,
-          family: "sans-serif",
-        },
-      },
-    },
-    layout: {
-      padding: {
-        left: 10,
-        right: 2,
-        top: 2,
-        bottom: 2,
-      },
-    },
-    scales: {
-      y: {
-        ticks: {
-          stepSize: 10000,
-        },
-      },
-      y1: {
-        display: true,
-        position: "right",
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-    },
-  };
 };
 
 export const dateValidation = (date) => dayjs(date).isBefore(dayjs());

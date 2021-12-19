@@ -1,5 +1,4 @@
 import React from "react";
-import { TimeRanges } from "../services/dataService";
 import { Card, CardHeader } from "@mui/material";
 
 const RangeCardsList = ({ range, onCardClick }) => {

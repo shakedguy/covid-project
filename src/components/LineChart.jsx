@@ -2,7 +2,9 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Box } from "@mui/material";
-import { countries, getData, colors, getDates, setChartOptions, reduceData } from "../services/dataService";
+import { countries, getData, colors } from "../services/dataService";
+import { setChartOptions } from "../services/helpers";
+import { getDates } from "../services/helpers";
 import Loader from "./Loader";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);

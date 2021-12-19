@@ -5,11 +5,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { dateValidation } from "../services/dataService";
 import useInput from "../hooks/useInput";
 
-const DatePickers = ({ range, onDatePicked }) => {
-  const [FromHasError, setFromHasError] = useState(false);
-  const [ToHasError, setToHasError] = useState(false);
-  const [IsRangeValid, setIsRangeValid] = useState(false);
-
+const DatePickers = ({ onDatePicked }) => {
   const {
     value: from,
     isValid: fromIsValid,
@@ -26,7 +22,7 @@ const DatePickers = ({ range, onDatePicked }) => {
     setInput: setTo,
     valueChangeHandler: toChangedHandler,
     inputBlurHandler: toBlurHandler,
-    reset: reseTo,
+    reset: resetTo,
   } = useInput((value) => dateValidation(value));
 
   useEffect(() => {
@@ -36,7 +32,7 @@ const DatePickers = ({ range, onDatePicked }) => {
 
   useEffect(() => {
     fromIsValid && toIsValid && onDatePicked(from, to);
-  }, [toIsValid, fromIsValid]);
+  }, [from, to]);
 
   return (
     <Stack>
@@ -69,11 +65,6 @@ const DatePickers = ({ range, onDatePicked }) => {
           error={toHasError}
         />
       </Box>
-      {/* {fromIsValid && toIsValid && (
-        <Button variant="contained" sx={{ alignSelf: "center", mt: 1, maxWidth: 120 }} startIcon={<DownloadIcon />}>
-          Send
-        </Button>
-      )} */}
     </Stack>
   );
 };

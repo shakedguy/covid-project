@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Box } from "@mui/material";
-import { countries, getData, colors, getDates, setChartOptions } from "../services/dataService";
+import { countries, getData, colors } from "../services/dataService";
+import { setChartOptions } from "../services/helpers";
+
+import { getDates } from "../services/helpers";
 import Loader from "./Loader";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
