@@ -44,7 +44,7 @@ const DatePickers = ({ onDatePicked }) => {
           value={from}
           onChange={fromChangedHandler}
           onBlur={fromBlurHandler}
-          sx={{ width: 220, mx: 3 }}
+          sx={{ width: 200, mx: 3 }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -58,7 +58,7 @@ const DatePickers = ({ onDatePicked }) => {
           value={to}
           onChange={toChangedHandler}
           onBlur={toBlurHandler}
-          sx={{ width: 220, mx: 3 }}
+          sx={{ width: 200, mx: 3 }}
           InputLabelProps={{
             shrink: true,
           }}

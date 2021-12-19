@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react";
-import RangeCardsList from "./RangeCardsList";
-import BarChart from "./BarChart.jsx";
-import LineChart from "./LineChart";
+import React, { useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { createRange } from "../services/helpers";
+import RangeCardsList from "../components/RangeCardsList";
+import BarChart from "../components/BarChart.jsx";
 import { Box, Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import DatePickers from "./DatePickers";
-import PieChart from "./PieChart";
-import { createRange } from "../services/helpers";
+import DatePickers from "../components/DatePickers";
+import PieChart from "../components/PieChart";
+import LineChart from "../components/LineChart";
 
 const Dashboard = () => {
   const [SelectedItem, setSelectedItem] = useState(null);
   const [IsDatePicked, setIsDatePicked] = useState(false);
   const [CustomRange, setCustomRange] = useState(null);
   const [RenderCustom, setRenderCustom] = useState(false);
+  const navigate = useNavigate();
   const rangeSelectionHandler = (selectedItem) => {
     setIsDatePicked(false);
     setRenderCustom(false);
     setSelectedItem(selectedItem);
+    navigate(selectedItem.title.toLowerCase().replace(" ", "-"));
   };
 
   const pickedDatesHandler = (start, end) => {
@@ -43,10 +46,12 @@ const Dashboard = () => {
           </Button>
         </Box>
       )}
-      {SelectedItem && SelectedItem.title === "Yesterday" && <PieChart range={SelectedItem} />}
-      {SelectedItem && SelectedItem.title === "This week" && <BarChart range={SelectedItem} />}
-      {SelectedItem && SelectedItem.title === "This month" && <LineChart range={SelectedItem} />}
-      {RenderCustom && <LineChart range={SelectedItem} />}
+      <Routes>
+        <Route path="yesterday" element={SelectedItem && SelectedItem.title === "Yesterday" && <PieChart range={SelectedItem} />} />
+        <Route path="this-week" element={SelectedItem && SelectedItem.title === "This week" && <BarChart range={SelectedItem} />} />
+        <Route path="this-month" element={SelectedItem && SelectedItem.title === "This month" && <LineChart range={SelectedItem} />} />
+        <Route path="custom" element={RenderCustom && <LineChart range={SelectedItem} />} />
+      </Routes>
     </>
   );
 };
