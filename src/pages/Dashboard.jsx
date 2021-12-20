@@ -23,7 +23,7 @@ const Dashboard = () => {
       const savedObject = JSON.parse(savedItem);
       rangeSelectionHandler(savedObject);
     }
-  });
+  }, []);
   const rangeSelectionHandler = (selectedItem) => {
     setIsDatePicked(false);
     setRenderCustom(false);
