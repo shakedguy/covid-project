@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { storeNewItem } from "../services/dataService";
 import { createRange } from "../services/helpers";
-import RangeCardsList from "../components/RangeCardsList";
-import BarChart from "../components/BarChart.jsx";
 import { Box, Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import RangeCardsList from "../components/RangeCardsList";
 import DatePickers from "../components/DatePickers";
 import PieChart from "../components/PieChart";
+import BarChart from "../components/BarChart.jsx";
 import LineChart from "../components/LineChart";
-import { storeNewItem } from "../services/dataService";
 
 const Dashboard = () => {
   const [SelectedItem, setSelectedItem] = useState(null);
@@ -23,13 +23,11 @@ const Dashboard = () => {
       const savedObject = JSON.parse(savedItem);
       rangeSelectionHandler(savedObject);
     }
-  }, []);
+  });
   const rangeSelectionHandler = (selectedItem) => {
-    // console.log(setSelectedItem);
     setIsDatePicked(false);
     setRenderCustom(false);
     setSelectedItem(selectedItem);
-    // localStorage.setItem("selected-item", JSON.stringify(selectedItem));
     storeNewItem(selectedItem);
     navigate(selectedItem.title.toLowerCase().replace(" ", "-"));
   };

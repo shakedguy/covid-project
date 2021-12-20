@@ -25,11 +25,9 @@ export const countries = ["israel", "united-states", "germany", "france", "china
 export const colors = ["rgba(53, 162, 235, 0.5", "rgba(215, 0, 64, 0.5)", "rgba(1, 1, 1, 0.5)", "rgba(128, 0, 128,0.5)", "rgba(255, 99, 132, 0.5)", "rgba(8, 143, 143, 0.5)", "rgba(255, 191, 0, 0.5)"];
 
 export const getData = async (range, status = "") => {
-  // datesFormatting(range.dates[0], range.dates[1], range.dates[2]);
-
   let result = sessionStorage.getItem(range.title);
-
   if (result) return JSON.parse(result);
+
   result = [];
   const [from, to] = datesFormatting(range.dates[0], range.dates[range.dates.length - 1]);
   const statusPath = status === "" ? "" : `/status/${status}`;
