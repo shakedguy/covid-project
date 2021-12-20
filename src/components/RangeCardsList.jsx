@@ -1,5 +1,5 @@
 import React from "react";
-import { getTimeRanges } from "../services/dataService";
+import { timeRanges } from "../services/dataService";
 import { Box } from "@mui/material";
 import RangeCard from "./RangeCard";
 
@@ -9,7 +9,7 @@ const RangeCardsList = ({ onRangeCardClick }) => {
   };
   return (
     <Box sx={{ mb: 0, display: "flex", justifyContent: "center" }}>
-      {getTimeRanges.map((range) => (
+      {timeRanges.map((range) => (
         <RangeCard range={range} onCardClick={selectedItemHandler} />
       ))}
     </Box>

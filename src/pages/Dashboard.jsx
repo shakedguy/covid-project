@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { createRange } from "../services/helpers";
 import RangeCardsList from "../components/RangeCardsList";
@@ -8,6 +8,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import DatePickers from "../components/DatePickers";
 import PieChart from "../components/PieChart";
 import LineChart from "../components/LineChart";
+import { storeNewItem } from "../services/dataService";
 
 const Dashboard = () => {
   const [SelectedItem, setSelectedItem] = useState(null);
@@ -15,10 +16,21 @@ const Dashboard = () => {
   const [CustomRange, setCustomRange] = useState(null);
   const [RenderCustom, setRenderCustom] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedItem = sessionStorage.getItem("selected-item");
+    if (savedItem) {
+      const savedObject = JSON.parse(savedItem);
+      rangeSelectionHandler(savedObject);
+    }
+  }, []);
   const rangeSelectionHandler = (selectedItem) => {
+    // console.log(setSelectedItem);
     setIsDatePicked(false);
     setRenderCustom(false);
     setSelectedItem(selectedItem);
+    // localStorage.setItem("selected-item", JSON.stringify(selectedItem));
+    storeNewItem(selectedItem);
     navigate(selectedItem.title.toLowerCase().replace(" ", "-"));
   };
 
@@ -28,7 +40,7 @@ const Dashboard = () => {
     setCustomRange(createRange(start, end));
   };
 
-  const fetchHandler = () => {
+  const fetchButtonHandler = () => {
     setSelectedItem({ title: SelectedItem.title, dates: CustomRange });
     setIsDatePicked(false);
     setRenderCustom(true);
@@ -41,7 +53,7 @@ const Dashboard = () => {
       </Box>
       {IsDatePicked && (
         <Box elevation={3} sx={{ width: "100%", textAlign: "center" }}>
-          <Button variant="contained" sx={{ maxWidth: 120 }} startIcon={<DownloadIcon />} onClick={fetchHandler}>
+          <Button variant="contained" sx={{ maxWidth: 120 }} startIcon={<DownloadIcon />} onClick={fetchButtonHandler}>
             Fetch
           </Button>
         </Box>

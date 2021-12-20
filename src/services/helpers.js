@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-export const getDates = (range) => range.map((date) => date.format("DD/MM"));
+
+export const getDates = (range) => range.map((date) => dayjs(date).format("DD/MM"));
 
 export const createRange = (from, to) => {
   const result = [];
@@ -10,6 +11,8 @@ export const createRange = (from, to) => {
   }
   return result;
 };
+
+export const datesFormatting = (...dates) => dates.map((date) => dayjs(date).format("YYYY-MM-DD"));
 
 export const setChartOptions = (title) => {
   return {
